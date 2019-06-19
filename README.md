@@ -1,11 +1,17 @@
 FCM -- Simple Firebase FCM Notification class
 
 ### Table of Contents
+**[Server Requirements](#initialization)**
 **[Initialization](#initialization)**  
 **[Notifications](#notification)**  
 **[Topics](#topics)**  
 
 
+###Server Requirements
+you will need to make sure your server meets the following requirements:
+PHP >= 5.3
+cURL PHP Extension 
+JSON PHP Extension
 ### Installation
 To use this class, simply import PushNotifications.php into your project, and require it then make sure that assign value in Config Array keys in : FIREBASE_API_KEY, APP_NAME, FIREBASE_URL.
 

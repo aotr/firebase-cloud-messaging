@@ -1,4 +1,7 @@
-FCM -- Simple Firebase FCM Notification class
+A simple php class that allows you to send Firebase Cloud Messaging /fcm notifications from your php
+
+Firebase Cloud Messaging (FCM) is a cross-platform messaging solution that lets you reliably deliver messages at no cost.
+
 
 ### Table of Contents
 **[Server Requirements](#initialization)**
@@ -86,3 +89,7 @@ $condition = "'testTopics' in topics && ('testTopics1' in topics || 'testTopics2
 $body = 'Hare Krishna';
 $fcm->topics(null, $condition, $body, $data);
 ```
+
+###Where To Look For Further Info
+- [Send messages using the legacy app server protocols](https://firebase.google.com/docs/cloud-messaging/send-message#send_messages_using_the_legacy_app_server_protocols)
+- [Offical Guides / Doc ](https://firebase.google.com/docs/cloud-messaging/)

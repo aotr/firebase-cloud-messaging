@@ -10,7 +10,7 @@ Firebase Cloud Messaging (FCM) is a cross-platform messaging solution that lets 
 **[Topics](#topics)**  
 
 
-###Server Requirements
+### Server Requirements
 you will need to make sure your server meets the following requirements:
 PHP >= 5.3
 cURL PHP Extension 
@@ -90,6 +90,6 @@ $body = 'Hare Krishna';
 $fcm->topics(null, $condition, $body, $data);
 ```
 
-###Where To Look For Further Info
+### Where To Look For Further Info
 - [Send messages using the legacy app server protocols](https://firebase.google.com/docs/cloud-messaging/send-message#send_messages_using_the_legacy_app_server_protocols)
 - [Offical Guides / Doc ](https://firebase.google.com/docs/cloud-messaging/)

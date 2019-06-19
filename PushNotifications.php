@@ -27,7 +27,7 @@ class FCM
     private $collapse_key;
     private $config;
 
-    function __construct($content_type) {
+    function __construct() {
         $this->content_type = (empty ($content_type)) ? self::CONTENT_JSON : $content_type ;
         $this->config = include('config.php');
         $this->headers();
@@ -36,7 +36,7 @@ class FCM
     private function headers() {
         $this->headers = [
             'Content-Type:' . $this->content_type,
-            'Authorization:key=' . $config['FIREBASE_API_KEY']
+            'Authorization:key=' . $this->config['FIREBASE_API_KEY']
         ];
     }
     public function topics($to, $condition, $body=null, $data=null, $title=null) {
@@ -48,22 +48,22 @@ class FCM
         $this->message($body, $data, $title);
     }
     public function notification($token, $body, $data=null, $title=null) {
-        
         $this->token = $token;
         $this->message[self::REGISTRATION_IDS] = $this->token;
+
         $this->message($body, $data, $title);
     }
 
 
     private function message($body, $data, $title) {
         if ($body != null) {
-            $this->message['notification'] = ['title' => $title ? $title : $config['APP_NAME'], 'body' => $body];
+            $this->message['notification'] = ['title' => $title ? $title : $this->config['APP_NAME'], 'body' => $body];
         }
         if ($data != null) {
             $this->message['data'] = $data;
         }
         if ($this->time_to_live != null) {
-            $this->message['time_to_live'] = $this->time_to_live;
+            $this->message['time_to_live'] = 60*60*24*5;//$this->time_to_live;
         }
         if ($this->collapse_key != null) {
             $this->message['collapse_key'] = $this->collapse_key;
@@ -72,6 +72,8 @@ class FCM
     }
 
     private function response() {
+
+
         if ((isset($this->response[self::FAILURE]) && $this->response[self::FAILURE] > 0) || 
             (isset($this->response[self::CANONICAL_IDS]) && $this->response[self::CANONICAL_IDS] > 0)) {
             foreach ($this->response[self::RESULTS] as $key => $result) {
@@ -79,21 +81,23 @@ class FCM
                     switch ($result[self::ERROR]) {
                         case self::UNAVAILABLE:
                             // do something
+
                             break;
                         case self::INVALID:
                             // do something
-                            unset($this->token[$key]);
+
                             break;
                         case self::NOT_REGISTERED:
-                            $this->remove_registration_id($this->token[$key]);
-                            unset($this->token[$key]);
+                            // do something
+                            
                             break;
                         case self::EXCEEDED:
                             // do something
+
                             break;
                     }
                 } elseif (isset($result[self::REGISTRATION_ID])) {
-                    $this->update_registration_id($this->token[$key], $result[self::REGISTRATION_ID]);
+                   
                     unset($this->token[$key]);
                 } else {
                     unset($this->token[$key]);
@@ -105,15 +109,17 @@ class FCM
     private function send() {
         if ($this->message != null) {
             $ch = curl_init();
+           
             curl_setopt_array($ch, [
-                CURLOPT_URL             => $config['FIREBASE_URL'],
+                CURLOPT_URL             => $this->config['FIREBASE_URL'],
                 CURLOPT_HTTPHEADER      => $this->headers,
                 CURLOPT_POST            => true,
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_SSL_VERIFYPEER  => false,
                 CURLOPT_POSTFIELDS      => json_encode($this->message)
             ]);
-            $this->response = json_decode(curl_exec($ch), true);
+            
+            $this->response = json_decode(curl_exec($ch),true);
             curl_close($ch);
             $this->response();
         }
